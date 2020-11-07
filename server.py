@@ -78,6 +78,6 @@ while True:
             user = clients[notified_socket]
 
             #   Create a format for the message to be sent to all the other clients
-            broadcast_message = "    <" + user.decode() + ">  " + message.decode()
+            broadcast_message = "<" + user.decode() + ">  " + message.decode()
             print(broadcast_message)
             send_all(broadcast_message, notified_socket)

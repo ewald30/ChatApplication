@@ -1,7 +1,8 @@
 import socket
+import sys
 import select
 
-IP = "192.168.100.5"
+IP = "127.0.0.1"
 PORT = 6969
 my_username = input("Username: ")
 
@@ -20,25 +21,13 @@ client_socket.setblocking(False)
 # We need to encode username to bytes, then count number of bytes and prepare header of fixed size, that we encode to bytes as well
 client_socket.send(my_username.encode())
 
+
 while True:
-
-    # Wait for user to input a message
-    message = input(f'    {my_username} > ')
-
-    # If message is not empty - send it
-    if message:
-        message = message + "\n"
-        client_socket.send(message.encode())
-
-    try:
-        # Now we want to loop over received messages (there might be more than one) and print them
-        while True:
+    readers, _, _ = select.select([client_socket, sys.stdin], [], [])
+    for reader in readers:
+        if reader is client_socket:
             message = client_socket.recv(100)
-
-            # Print message
-            print(message.decode(),"\n")
-
-    except IOError as e:
-        # We just did not receive anything
-        continue
-
+            print(message.decode(), end="", flush=True)
+        else:
+            message = sys.stdin.readline()
+            client_socket.send(message.encode())
