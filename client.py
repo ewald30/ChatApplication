@@ -7,8 +7,6 @@ PORT = 6969
 my_username = input("Username: ")
 
 # Create a socket
-# socket.AF_INET - address family, IPv4, some otehr possible are AF_INET6, AF_BLUETOOTH, AF_UNIX
-# socket.SOCK_STREAM - TCP, conection-based, socket.SOCK_DGRAM - UDP, connectionless, datagrams, socket.SOCK_RAW - raw IP packets
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect to a given ip and port
@@ -18,16 +16,20 @@ client_socket.connect((IP, PORT))
 client_socket.setblocking(False)
 
 # Prepare username and header and send them
-# We need to encode username to bytes, then count number of bytes and prepare header of fixed size, that we encode to bytes as well
 client_socket.send(my_username.encode())
 
 
 while True:
+    #   Add stdin as a potential reader
     readers, _, _ = select.select([client_socket, sys.stdin], [], [])
+
+    #   Check if something is ready to be read in either stdin or in the socket
     for reader in readers:
         if reader is client_socket:
+            #   If socket is ready then we read the data from the socket and print the message
             message = client_socket.recv(100)
             print(message.decode(), end="", flush=True)
         else:
+            #   If the user has written something then send the message
             message = sys.stdin.readline()
             client_socket.send(message.encode())
