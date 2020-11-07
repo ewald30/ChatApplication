@@ -25,7 +25,7 @@ This way, when we receive data the "recv()" call is not blocked by "stdin.readli
   
   
 How to use:
-Note: you have to have Python 3.7 or above installated
+Note: you have to have Python 3.7 or above installed!
 
 (Linux/MacOS)
 Start the server by executing: python3 server.py
