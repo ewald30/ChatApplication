@@ -1,5 +1,5 @@
 # ChatApplication
-Simple chat application with No GUI (Yet) using python and socket programming
+Simple chat application with no GUI (yet) using python and socket programming
 
 This method works only on LAN!
 
